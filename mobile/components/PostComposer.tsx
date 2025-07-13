@@ -16,6 +16,11 @@ const PostComposer = () => {
   } = useCreatePost();
 
   const { user } = useUser();
+  console.log(' ');
+  console.log(' ');
+  console.log(' ');
+
+  console.log('PostComposer - user: ', user?.emailAddresses[0].emailAddress, user?.fullName, user?.username);
 
   return (
     <View className="border-b border-gray-100 p-4 bg-white">

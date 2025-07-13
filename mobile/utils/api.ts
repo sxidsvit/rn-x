@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 import { useAuth } from "@clerk/clerk-expo";
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || "https://rn-x.vercel.app/api";
-console.log('process.env.EXPO_PUBLIC_API_URL: ', process.env.EXPO_PUBLIC_API_URL);
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || "https://x-clone-rn.vercel.app/api";
+console.log('API_BASE_URL: ', API_BASE_URL);
 // ! 🔥 localhost api would not work on your actual physical device
 // const API_BASE_URL = "http://localhost:5001/api";
 
@@ -11,7 +11,16 @@ export const createApiClient = (getToken: () => Promise<string | null>): AxiosIn
   const api = axios.create({ baseURL: API_BASE_URL });
 
   api.interceptors.request.use(async (config) => {
-    const token = await getToken();
+    const token = (await getToken())?.trim();
+    console.log(' ------------------------------------------------- ');
+    console.log(' ------------------------------------------------- ');
+    console.log(' ------------------------------------------------- ');
+    console.log(' ------------------------------------------------- ');
+    console.log('createApiClient - token: ', token);
+    console.log(' ------------------------------------------------- ');
+    console.log(' ------------------------------------------------- ');
+    console.log(' ------------------------------------------------- ');
+    console.log(' ------------------------------------------------- ');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -23,7 +32,6 @@ export const createApiClient = (getToken: () => Promise<string | null>): AxiosIn
 
 export const useApiClient = (): AxiosInstance => {
   const { getToken } = useAuth();
-  console.log('getToken: ', getToken);
   return createApiClient(getToken);
 };
 

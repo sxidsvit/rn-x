@@ -25,19 +25,17 @@ export const updateProfile = asyncHandler(async (req, res) => {
 
 export const syncUser = asyncHandler(async (req, res) => {
   const { userId } = getAuth(req);
-  console.log("Получен userId:", userId);
+  console.log('syncUser - userId: ', userId);
 
   // check if user already exists in mongodb
   const existingUser = await User.findOne({ clerkId: userId });
-  console.log("Результат поиска existingUser:", existingUser);
-
   if (existingUser) {
     return res.status(200).json({ user: existingUser, message: "User already exists" });
   }
 
   // create new user from Clerk data
   const clerkUser = await clerkClient.users.getUser(userId);
-  console.log("Данные от Clerk:", clerkUser);
+  console.log('clerkClient.users.getUser - clerkUser: ', clerkUser);
 
   const userData = {
     clerkId: userId,
@@ -47,6 +45,8 @@ export const syncUser = asyncHandler(async (req, res) => {
     username: clerkUser.emailAddresses[0].emailAddress.split("@")[0],
     profilePicture: clerkUser.imageUrl || "",
   };
+
+  console.log('syncUser - userData: ', userData);
 
   const user = await User.create(userData);
 
