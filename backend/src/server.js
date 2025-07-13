@@ -16,7 +16,6 @@ import { arcjetMiddleware } from "./middleware/arcjet.middleware.js";
 
 const clerkClient = createClerkClient({
   secretKey: ENV.CLERK_SECRET_KEY,
-  publishableKey: ENV.CLERK_PUBLISHABLE_KEY
 });
 
 process.on("uncaughtException", (err) => {
@@ -54,12 +53,14 @@ app.get("/test-error", (req, res) => {
   throw new Error("Test error!");
 });
 
-app.get('/verify-token', clerkMiddleware(), async (req, res) => {
+app.get('/verify-token', async (req, res) => {
+  console.log('Request headers:', req.headers);
+  console.log('Is getAuth a Promise?', getAuth(req) instanceof Promise);
   const auth = getAuth(req);
-  console.log('Auth result:', JSON.stringify(auth, null, 2)); // Отладка
+  console.log('Auth result:', JSON.stringify(auth, null, 2));
   if (!auth.userId) {
     return res.status(401).json({
-      error: 'Unauthorized',
+      error: '/verify-token - Unauthorized',
       reason: auth.reason,
       message: auth.message
     });
@@ -72,6 +73,22 @@ app.get('/verify-token', clerkMiddleware(), async (req, res) => {
       claims: auth
     }
   });
+});
+
+app.get('/check-session', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+  try {
+    const decoded = await clerkClient.verifyToken(token);
+    console.log('Token verified:', decoded);
+    const session = await clerkClient.sessions.getSession(decoded.sid);
+    res.json({ session, decoded });
+  } catch (error) {
+    console.error('Session check error:', error);
+    res.status(401).json({ error: 'Session verification failed', details: error.message });
+  }
 });
 
 

@@ -2,7 +2,7 @@ import { getAuth } from '@clerk/express';
 
 export const protectRoute = async (req, res, next) => {
 
-  const auth = getAuth(req);
+  const auth = await getAuth(req);
   console.log('Auth result:', JSON.stringify(auth, null, 2)); // Отладка
   if (!auth.userId) {
     return res.status(401).json({
