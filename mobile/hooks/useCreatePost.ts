@@ -5,10 +5,12 @@ import * as ImagePicker from "expo-image-picker";
 import { useApiClient } from "../utils/api";
 
 export const useCreatePost = () => {
-  const [content, setContent] = useState("");
+  const [ content, setContent] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const api = useApiClient();
   const queryClient = useQueryClient();
+  
+
 
   const createPostMutation = useMutation({
     mutationFn: async (postData: { content: string; imageUri?: string }) => {
@@ -33,6 +35,8 @@ export const useCreatePost = () => {
           type: mimeType,
         } as any);
       }
+
+      console.log('createPostMutation - formData: ', formData);
 
       return api.post("/posts", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -77,6 +81,8 @@ export const useCreatePost = () => {
   };
 
   const createPost = () => {
+    console.log('createPost  - postData: ', postData);
+    
     if (!content.trim() && !selectedImage) {
       Alert.alert("Empty Post", "Please write something or add an image before posting!");
       return;

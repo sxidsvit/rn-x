@@ -1,8 +1,13 @@
 import { useSocialAuth } from "@/hooks/useSocialAuth";
 import { ActivityIndicator, Image, Text, TouchableOpacity, View } from "react-native";
+import { Redirect } from "expo-router";
 
 export default function Index() {
-  const { handleSocialAuth, isLoading } = useSocialAuth();
+  const { handleSocialAuth, isLoading, isAuthenticated } = useSocialAuth();
+
+  if (isAuthenticated) {
+    return <Redirect href="/(tabs)" />;
+  }
 
   return (
     <View className="flex-1 bg-white">

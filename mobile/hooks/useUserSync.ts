@@ -14,12 +14,16 @@ export const useUserSync = () => {
   });
 
   // auto-sync user when signed in
+  
+  console.log("useUserSync effect triggered. isSignedIn: ", isSignedIn, " BEFORE - syncUserMutation: ", syncUserMutation);
+  
   useEffect(() => {
     // if user is signed in and user is not synced yet, sync user
     if (isSignedIn && !syncUserMutation.data) {
       syncUserMutation.mutate();
     }
-  }, [isSignedIn]);
+    console.log("useUserSync effect triggered. isSignedIn: ", isSignedIn, " AFTER - syncUserMutation.data: ", syncUserMutation.data);
+  }, [isSignedIn,]);
 
   return null;
 };

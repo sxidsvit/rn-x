@@ -11,7 +11,7 @@ export const createApiClient = (getToken: () => Promise<string | null>): AxiosIn
   const api = axios.create({ baseURL: API_BASE_URL });
 
   api.interceptors.request.use(async (config) => {
-    const token = (await getToken())?.trim();
+    const token = (await getToken({ template: "JWT-template-30m" }))?.trim();
     console.log(' ------------------------------------------------- ');
     console.log(' ------------------------------------------------- ');
     console.log(' ------------------------------------------------- ');

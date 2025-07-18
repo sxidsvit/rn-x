@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import { clerkMiddleware, getAuth } from "@clerk/express";
-import { createClerkClient } from '@clerk/backend';
 
 
 import userRoutes from "./routes/user.route.js";
@@ -12,11 +11,6 @@ import notificationRoutes from "./routes/notification.route.js";
 import { ENV } from "./config/env.js";
 import { connectDB } from "./config/db.js";
 import { arcjetMiddleware } from "./middleware/arcjet.middleware.js";
-
-
-const clerkClient = createClerkClient({
-  secretKey: ENV.CLERK_SECRET_KEY,
-});
 
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
@@ -49,15 +43,11 @@ app.get('/debug-auth', (req, res) => {
 
 app.get("/", (req, res) => res.send("Hello from server"));
 
-app.get("/test-error", (req, res) => {
-  throw new Error("Test error!");
-});
-
 app.get('/verify-token', async (req, res) => {
   console.log('Request headers:', req.headers);
   console.log('Is getAuth a Promise?', getAuth(req) instanceof Promise);
   const auth = getAuth(req);
-  console.log('Auth result:', JSON.stringify(auth, null, 2));
+  console.log('/verify-token - Auth result:', JSON.stringify(auth, null, 2));
   if (!auth.userId) {
     return res.status(401).json({
       error: '/verify-token - Unauthorized',
@@ -73,22 +63,6 @@ app.get('/verify-token', async (req, res) => {
       claims: auth
     }
   });
-});
-
-app.get('/check-session', async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ error: 'No token provided' });
-  }
-  try {
-    const decoded = await clerkClient.verifyToken(token);
-    console.log('Token verified:', decoded);
-    const session = await clerkClient.sessions.getSession(decoded.sid);
-    res.json({ session, decoded });
-  } catch (error) {
-    console.error('Session check error:', error);
-    res.status(401).json({ error: 'Session verification failed', details: error.message });
-  }
 });
 
 

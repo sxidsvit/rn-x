@@ -2,8 +2,14 @@ import { getAuth } from '@clerk/express';
 
 export const protectRoute = async (req, res, next) => {
 
-  const auth = await getAuth(req);
-  console.log('Auth result:', JSON.stringify(auth, null, 2)); // Отладка
+  const auth = getAuth(req);
+  console.log('         ')
+  console.log('         ')
+  console.log('protectRoute - auth.isAuthenticated: ', auth.isAuthenticated); // Отладка
+  console.log('protectRoute - auth.userId: ', auth.userId); // Отладка
+  console.log('         ')
+  console.log('         ')
+
   if (!auth.userId) {
     return res.status(401).json({
       error: 'Unauthorized',
@@ -22,3 +28,10 @@ export const protectRoute = async (req, res, next) => {
 
   next();
 };
+
+// export const protectRoute = async (req, res, next) => {
+//   if (!req.auth().isAuthenticated) {
+//     return res.status(401).json({ message: "Unauthorized - you must be logged in" });
+//   }
+//   next();
+// };

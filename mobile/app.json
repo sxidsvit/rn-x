@@ -5,7 +5,8 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "mobile",
+    "scheme": "exp",
+    "hostUri": "192.168.0.205:8081",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -38,6 +39,15 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "linking": {
+      "scheme": "exp",
+      "config": {
+        "screens": {
+          "sso-callback": "sso-callback",
+          "(tabs)": "(tabs)"
+        }
+      }
     }
   }
 }
