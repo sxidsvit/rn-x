@@ -23,34 +23,69 @@ export const updateProfile = asyncHandler(async (req, res) => {
   res.status(200).json({ user });
 });
 
+// export const syncUser = asyncHandler(async (req, res) => {
+//   const { userId } = getAuth(req);
+//   console.log('syncUser - getAuth(req) - userId: ', userId);
+
+//   // check if user already exists in mongodb
+//   const existingUser = await User.findOne({ clerkId: userId });
+//   console.log('syncUser -  existingUser.clerkId: ', existingUser);
+//   if (existingUser) {
+//     return res.status(200).json({ user: existingUser, message: "User already exists" });
+//   }
+
+//   // create new user from Clerk data
+//   const clerkUser = await clerkClient.users.getUser(userId);
+//   console.log('clerkClient.users.getUser(userId) - clerkUser.id: ', clerkUser.id);
+
+//   const userData = {
+//     clerkId: userId,
+//     email: clerkUser.emailAddresses[0].emailAddress,
+//     firstName: clerkUser.firstName || "",
+//     lastName: clerkUser.lastName || "",
+//     username: clerkUser.emailAddresses[0].emailAddress.split("@")[0],
+//     profilePicture: clerkUser.imageUrl || "",
+//   };
+
+//   const user = await User.create(userData);
+
+//   console.log('syncUser - User.create(userData) -  user.clerkId: ', user.clerkId);
+
+//   res.status(201).json({ user, message: "User created successfully" });
+// });
+
 export const syncUser = asyncHandler(async (req, res) => {
   const { userId } = getAuth(req);
-  console.log('syncUser - userId: ', userId);
+  console.log('syncUser - getAuth(req) - userId: ', userId);
 
-  // check if user already exists in mongodb
   const existingUser = await User.findOne({ clerkId: userId });
+  console.log('syncUser - existingUser.clerkId: ', existingUser?.clerkId);
+
   if (existingUser) {
     return res.status(200).json({ user: existingUser, message: "User already exists" });
   }
 
-  // create new user from Clerk data
-  const clerkUser = await clerkClient.users.getUser(userId);
-  console.log('clerkClient.users.getUser - clerkUser: ', clerkUser);
+  try {
+    const clerkUser = await clerkClient.users.getUser(userId);
+    console.log('clerkClient.users.getUser(userId) - clerkUser.id: ', clerkUser.id);
 
-  const userData = {
-    clerkId: userId,
-    email: clerkUser.emailAddresses[0].emailAddress,
-    firstName: clerkUser.firstName || "",
-    lastName: clerkUser.lastName || "",
-    username: clerkUser.emailAddresses[0].emailAddress.split("@")[0],
-    profilePicture: clerkUser.imageUrl || "",
-  };
+    const userData = {
+      clerkId: userId,
+      email: clerkUser.emailAddresses[0].emailAddress,
+      firstName: clerkUser.firstName || "",
+      lastName: clerkUser.lastName || "",
+      username: clerkUser.emailAddresses[0].emailAddress.split("@")[0],
+      profilePicture: clerkUser.imageUrl || "",
+    };
 
-  console.log('syncUser - userData: ', userData);
+    const user = await User.create(userData);
+    console.log('syncUser - User.create(userData) - user.clerkId: ', user.clerkId);
 
-  const user = await User.create(userData);
-
-  res.status(201).json({ user, message: "User created successfully" });
+    res.status(201).json({ user, message: "User created successfully" });
+  } catch (error) {
+    console.error('Error in syncUser:', error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 export const getCurrentUser = asyncHandler(async (req, res) => {

@@ -73,6 +73,7 @@ export const createPost = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ clerkId: userId });
   if (!user) return res.status(404).json({ error: "User not found" });
+  console.log('createPost -  user: ', user);
 
   let imageUrl = "";
 
@@ -105,6 +106,8 @@ export const createPost = asyncHandler(async (req, res) => {
     content: content || "",
     image: imageUrl,
   });
+
+  console.log('createPost - post: ', post);
 
   res.status(201).json({ post });
 });

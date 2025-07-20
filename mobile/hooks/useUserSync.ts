@@ -7,23 +7,24 @@ export const useUserSync = () => {
   const { isSignedIn } = useAuth();
   const api = useApiClient();
 
+
   const syncUserMutation = useMutation({
-    mutationFn: () => userApi.syncUser(api),
+    mutationFn: () => {
+      console.log("Calling syncUser with URL:", api.defaults.baseURL + "/users/sync");
+      return userApi.syncUser(api);
+    },
     onSuccess: (response: any) => console.log("User synced successfully:", response.data.user),
     onError: (error) => console.error("User sync failed:", error),
   });
 
-  // auto-sync user when signed in
-  
-  console.log("useUserSync effect triggered. isSignedIn: ", isSignedIn, " BEFORE - syncUserMutation: ", syncUserMutation);
-  
+ 
   useEffect(() => {
-    // if user is signed in and user is not synced yet, sync user
+    console.log("useEffect running - isSignedIn:", isSignedIn, "syncUserMutation.data:", syncUserMutation.data);
     if (isSignedIn && !syncUserMutation.data) {
       syncUserMutation.mutate();
     }
-    console.log("useUserSync effect triggered. isSignedIn: ", isSignedIn, " AFTER - syncUserMutation.data: ", syncUserMutation.data);
-  }, [isSignedIn,]);
+    console.log("useEffect - syncUserMutation.data: ", syncUserMutation.data);
+  }, [isSignedIn]); // Removed trailing comma
 
   return null;
 };

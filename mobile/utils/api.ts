@@ -14,11 +14,7 @@ export const createApiClient = (getToken: () => Promise<string | null>): AxiosIn
     const token = (await getToken({ template: "JWT-template-30m" }))?.trim();
     console.log(' ------------------------------------------------- ');
     console.log(' ------------------------------------------------- ');
-    console.log(' ------------------------------------------------- ');
-    console.log(' ------------------------------------------------- ');
     console.log('createApiClient - token: ', token);
-    console.log(' ------------------------------------------------- ');
-    console.log(' ------------------------------------------------- ');
     console.log(' ------------------------------------------------- ');
     console.log(' ------------------------------------------------- ');
     if (token) {
