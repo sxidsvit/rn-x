@@ -26,6 +26,12 @@ rn-x provides a seamless user experience with features such as secure user authe
 - ARCJET API key for security features
 - Yarn or npm
 
+---
+
+![](demo-mob.gif) ![](demo-backend.gif)
+
+---
+
 ## Installation
 
 1. Clone the repository:
