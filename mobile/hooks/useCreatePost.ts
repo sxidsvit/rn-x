@@ -36,8 +36,6 @@ export const useCreatePost = () => {
         } as any);
       }
 
-      console.log('createPostMutation - formData: ', formData);
-
       return api.post("/posts", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
