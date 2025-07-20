@@ -19,11 +19,9 @@ export const useUserSync = () => {
 
  
   useEffect(() => {
-    console.log("useEffect running - isSignedIn:", isSignedIn, "syncUserMutation.data:", syncUserMutation.data);
     if (isSignedIn && !syncUserMutation.data) {
       syncUserMutation.mutate();
     }
-    console.log("useEffect - syncUserMutation.data: ", syncUserMutation.data);
   }, [isSignedIn]); // Removed trailing comma
 
   return null;
