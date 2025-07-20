@@ -8,7 +8,7 @@ export const useSocialAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { startSSOFlow } = useSSO();
 
-  const handleSocialAuth = async (strategy: "oauth_google" | "oauth_apple") => {
+  const handleSocialAuth = async (strategy: "oauth_google" | "oauth_github") => {
     setIsLoading(true);
     try {
       const { createdSessionId, setActive } = await startSSOFlow({
@@ -21,7 +21,7 @@ export const useSocialAuth = () => {
       }
     } catch (err) {
       console.log("Error in social auth", err);
-      const provider = strategy === "oauth_google" ? "Google" : "Apple";
+      const provider = strategy === "oauth_google" ? "Google" : "GitHub";
       Alert.alert("Error", `Failed to sign in with ${provider}. Please try again.`);
     } finally {
       setIsLoading(false);

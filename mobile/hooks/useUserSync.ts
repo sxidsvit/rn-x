@@ -13,7 +13,7 @@ export const useUserSync = () => {
       console.log("Calling syncUser with URL:", api.defaults.baseURL + "/users/sync");
       return userApi.syncUser(api);
     },
-    onSuccess: (response: any) => console.log("User synced successfully:", response.data.user),
+    onSuccess: (response: any) => console.log("User synced successfully (MongoDB id):", response.data.user._id),
     onError: (error) => console.error("User sync failed:", error),
   });
 

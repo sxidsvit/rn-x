@@ -53,7 +53,7 @@ export default function Index() {
             {/* APPLE SIGNIN ICON */}
             <TouchableOpacity
               className="flex-row items-center justify-center bg-white border border-gray-300 rounded-full py-3 px-6"
-              onPress={() => handleSocialAuth("oauth_apple")}
+              onPress={() => handleSocialAuth("oauth_github")}
               disabled={isLoading}
               style={{
                 shadowColor: "#000",
@@ -68,11 +68,11 @@ export default function Index() {
               ) : (
                 <View className="flex-row items-center justify-center">
                   <Image
-                    source={require("../../assets/images/apple.png")}
+                    source={require("../../assets/images/github.png")}
                     className="size-8 mr-3"
                     resizeMode="contain"
                   />
-                  <Text className="text-black font-medium text-base">Continue with Apple</Text>
+                  <Text className="text-black font-medium text-base">Continue with GitHub</Text>
                 </View>
               )}
             </TouchableOpacity>

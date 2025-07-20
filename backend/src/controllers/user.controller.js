@@ -67,7 +67,6 @@ export const syncUser = asyncHandler(async (req, res) => {
 
   try {
     const clerkUser = await clerkClient.users.getUser(userId);
-    console.log('clerkClient.users.getUser(userId) - clerkUser.id: ', clerkUser.id);
 
     const userData = {
       clerkId: userId,

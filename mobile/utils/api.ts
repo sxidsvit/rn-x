@@ -11,11 +11,9 @@ export const createApiClient = (getToken: () => Promise<string | null>): AxiosIn
   const api = axios.create({ baseURL: API_BASE_URL });
 
   api.interceptors.request.use(async (config) => {
-    const token = (await getToken({ template: "JWT-template-30m" }))?.trim();
-    console.log(' ------------------------------------------------- ');
+    const token = (await getToken())?.trim();
     console.log(' ------------------------------------------------- ');
     console.log('createApiClient - token: ', token);
-    console.log(' ------------------------------------------------- ');
     console.log(' ------------------------------------------------- ');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
